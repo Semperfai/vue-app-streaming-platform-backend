@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<title>Video player</title>
+</head>
+
+<body>
+	<div id="app">
+		<video :src="videoUrl" controls autoplay></video>
+		<hr />
+		<input v-model="searchTerm" placeholder="Пошук фільму" type="search" />
+		<button @click="findMovie">Знайти</button>
+		<ul>
+			<li v-for="file in files" :key="file.magnet">
+				{{file.title}}
+				<button @click="play(file)">Play</button>
+			</li>
+		</ul>
+	</div>
+	<script>
+		const { createApp } = Vue
+		createApp({
+			data() {
+				return {
+					searchTerm: '',
+					activeVideo: {},
+					files: [
+					],
+				}
+			},
+			async mounted() {
+				this.getMyMovies()
+			},
+			computed: {
+				videoUrl: ({ activeVideo }) => activeVideo.fileName ? `/stream/${activeVideo.magnet}/${activeVideo.fileName}` : ''
+			},
+			methods: {
+				async play(file) {
+					const { data } = await axios.get(`/stream/add/${file.magnet}`)
+					console.log(data);
+					this.activeVideo = {
+						magnet: file.magnet,
+						fileName: data[0].name
+
+					}
+				},
+				async findMovie() {
+					const response = await axios.get(`/movies/search?searchTerm=${this.searchTerm}`)
+					this.files = response.data
+				},
+				async getMyMovies() {
+					const response = await axios.get(`/movies`)
+					this.files = response.data
+				}
+			},
+		}).mount('#app')
+	</script>
+</body>
+
+</html>
