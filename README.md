@@ -1,11 +1,13 @@
 - Backend частина для проекту стримінгової платформи.
 - Під час роботи з ментором відбулося ознайомлення та робота з:
-1) TypeScript
-2) Node.js(Express)
-3) MongoDB
-4) Робта з зовнішнім API(IMDB)
-5) Web scraping
-6) Docker
+1) P2P(протокол)
+2) WebTorrent
+3) TypeScript
+4) Node.js(Express)
+5) MongoDB
+6) Робта з зовнішнім API(IMDB)
+7) Web scraping
+8) Docker
 
 
 
